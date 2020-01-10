@@ -1,18 +1,15 @@
 package com.choilabo.todo.data.todo.entity
 
-import io.realm.RealmObject
-import io.realm.annotations.PrimaryKey
-import java.util.*
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
 /**
- * Created by sato_shinichiro on 2017/12/04.
+ * Created by sato_shinichiro on 2020-01-10
  */
-open class Todo : RealmObject() {
-
-    @PrimaryKey
-    var id = UUID.randomUUID().toString()
-
-    var title: String = ""
-    var description: String = ""
-    var updatedAt: Long = 0
-}
+@Entity(tableName = "todo_table")
+data class Todo(
+    @PrimaryKey @ColumnInfo(name = "id") val id: String,
+    @ColumnInfo(name = "title") val title: String,
+    @ColumnInfo(name = "updatedAt") val updatedAt: Long
+)

@@ -1,12 +1,16 @@
 package com.choilabo.todo.data
 
+import com.choilabo.todo.data.db.DatabaseModule
 import com.choilabo.todo.data.todo.TodoModule
 import dagger.Module
 
 /**
- * Created by sato_shinichiro on 2017/12/04.
+ * Created by sato_shinichiro on 2020-01-10
  */
-@Module(includes = arrayOf(
+@Module(
+    includes = [
+        DatabaseModule::class,
         TodoModule::class
-))
-class DataModule
+    ]
+)
+interface DataModule

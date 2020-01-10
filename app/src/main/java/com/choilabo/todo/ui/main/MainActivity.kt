@@ -1,52 +1,50 @@
 package com.choilabo.todo.ui.main
 
-import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModel
 import com.choilabo.todo.R
-import com.choilabo.todo.data.todo.local.TodoDataClient
-import com.choilabo.todo.databinding.MainAcitivtyBinding
-import com.choilabo.todo.ui.base.BaseActivity
-import com.choilabo.todo.ui.todo.create.TodoCreateActivity
-import com.choilabo.todo.ui.todo.detail.TodoDetailActivity
-import timber.log.Timber
+import com.choilabo.todo.databinding.MainActivityBinding
+import com.choilabo.todo.di.ViewModelFactory
+import com.choilabo.todo.di.ViewModelKey
+import com.choilabo.todo.di.get
+import dagger.Binds
+import dagger.android.support.DaggerAppCompatActivity
+import dagger.multibindings.IntoMap
+import kotlinx.android.synthetic.main.main_activity.*
 import javax.inject.Inject
 
-/**
- * Created by sato_shinichiro on 2017/12/07.
- */
-
-class MainActivity : BaseActivity() {
+class MainActivity : DaggerAppCompatActivity() {
 
     @Inject
-    lateinit var todoDataClient: TodoDataClient
+    lateinit var viewModelFactory: ViewModelFactory
 
-    private lateinit var mainAdapter: MainAdapter
-    private lateinit var binding: MainAcitivtyBinding
+    private val viewModel by lazy {
+        viewModelFactory.get<MainViewModel>(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView<MainAcitivtyBinding>(this, R.layout.main_acitivty)
-        binding.content.run {
-            layoutManager = LinearLayoutManager(this@MainActivity)
-            mainAdapter = MainAdapter(todoDataClient.getAll())
-            mainAdapter.onItemClick()
-                    .subscribe(
-                            { startActivity(TodoDetailActivity.createIntent(this@MainActivity, it.id)) },
-                            { Timber.e(it) }
-                    )
-                    .run { disposeOnDestroy(this) }
-            adapter = mainAdapter
-            setHasFixedSize(true)
+
+        lifecycle.addObserver(viewModel.disposableObserver)
+
+        DataBindingUtil.setContentView<MainActivityBinding>(
+            this,
+            R.layout.main_activity
+        ).also {
+            it.lifecycleOwner = this
+            it.viewModel = viewModel
         }
 
-        binding.btnCreate.setOnClickListener {
-            startActivity(TodoCreateActivity.createIntent(this))
-        }
+        setSupportActionBar(toolbar)
     }
 
-    override fun onResume() {
-        super.onResume()
-        binding.content.adapter.notifyDataSetChanged()
+    @dagger.Module
+    interface Module {
+
+        @Binds
+        @IntoMap
+        @ViewModelKey(MainViewModel::class)
+        fun bindsMainViewModel(viewModel: MainViewModel): ViewModel
     }
 }

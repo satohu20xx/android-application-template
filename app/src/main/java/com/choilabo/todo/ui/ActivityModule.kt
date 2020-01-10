@@ -1,24 +1,23 @@
 package com.choilabo.todo.ui
 
-import com.choilabo.todo.data.DataModule
-import com.choilabo.todo.ui.delegate.LifecycleDisposableDelegate
-import com.choilabo.todo.ui.delegate.impl.LifecycleDisposableDelegateImpl
-import com.choilabo.todo.ui.main.MainActivityModule
-import com.choilabo.todo.ui.todo.create.TodoCreateActivityModule
-import com.choilabo.todo.ui.todo.detail.TodoDetailActivityModule
+import androidx.lifecycle.ViewModelProvider
+import com.choilabo.todo.di.ActivityScope
+import com.choilabo.todo.di.ViewModelFactory
+import com.choilabo.todo.ui.main.MainActivity
 import dagger.Binds
 import dagger.Module
+import dagger.android.ContributesAndroidInjector
 
 /**
- * Created by sato_shinichiro on 2017/12/04.
+ * Created by sato_shinichiro on 2020-01-10
  */
-@Module(includes = arrayOf(
-        DataModule::class,
-        MainActivityModule::class,
-        TodoCreateActivityModule::class,
-        TodoDetailActivityModule::class
-))
-abstract class ActivityModule {
+@Module
+interface ActivityModule {
+
     @Binds
-    abstract fun provideLifecycleDisposableDelegate(lifecycleDisposableDelegate: LifecycleDisposableDelegateImpl): LifecycleDisposableDelegate
+    fun bindsViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory
+
+    @ActivityScope
+    @ContributesAndroidInjector(modules = arrayOf(MainActivity.Module::class))
+    fun contributeMainActivityInjector(): MainActivity
 }
