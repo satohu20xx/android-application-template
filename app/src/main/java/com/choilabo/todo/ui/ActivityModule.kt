@@ -1,23 +1,21 @@
 package com.choilabo.todo.ui
 
 import androidx.lifecycle.ViewModelProvider
-import com.choilabo.todo.di.ActivityScope
 import com.choilabo.todo.di.ViewModelFactory
-import com.choilabo.todo.ui.main.MainActivity
+import com.choilabo.todo.ui.main.MainActivityModule
 import dagger.Binds
 import dagger.Module
-import dagger.android.ContributesAndroidInjector
 
 /**
  * Created by sato_shinichiro on 2020-01-10
  */
-@Module
+@Module(
+    includes = [
+        MainActivityModule::class
+    ]
+)
 interface ActivityModule {
 
     @Binds
     fun bindsViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory
-
-    @ActivityScope
-    @ContributesAndroidInjector(modules = arrayOf(MainActivity.Module::class))
-    fun contributeMainActivityInjector(): MainActivity
 }
