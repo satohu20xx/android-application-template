@@ -9,9 +9,9 @@ import com.choilabo.todo.data.todo.entity.Todo
 import com.choilabo.todo.databinding.MainViewBinding
 import com.choilabo.todo.ui.todo.TodoInputDataBinding
 import com.choilabo.todo.ui.todo.TodoLineDataBinder
-import mva2.adapter.ItemSection
-import mva2.adapter.ListSection
-import mva2.adapter.MultiViewAdapter
+import mva3.adapter.ItemSection
+import mva3.adapter.ListSection
+import mva3.adapter.MultiViewAdapter
 
 /**
  * Created by sato_shinichiro on 2020-01-10

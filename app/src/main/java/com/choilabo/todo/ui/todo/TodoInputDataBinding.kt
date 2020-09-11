@@ -3,7 +3,7 @@ package com.choilabo.todo.ui.todo
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.choilabo.todo.databinding.TodoInputViewBinding
-import mva2.extension.DBItemBinder
+import mva3.extension.DBItemBinder
 
 /**
  * Created by sato_shinichiro on 2020-01-10

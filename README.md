@@ -6,6 +6,6 @@ This code is simple todo application.
 - ViewModel
 - Room
 - Dagger2
-- RxJava
+- Dagger Hilt
 - MultiViewAdapter
 - Timber

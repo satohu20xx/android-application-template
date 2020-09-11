@@ -2,34 +2,27 @@ package com.choilabo.todo.data.todo
 
 import com.choilabo.todo.data.todo.entity.Todo
 import com.choilabo.todo.data.todo.repository.TodoRepository
-import io.reactivex.Completable
-import io.reactivex.Flowable
-import io.reactivex.schedulers.Schedulers
+import dagger.Reusable
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.withContext
 import java.util.*
 import javax.inject.Inject
 
 /**
  * Created by sato_shinichiro on 2020-01-10
  */
-interface TodoModel {
-
-    fun observe(): Flowable<List<Todo>>
-
-    fun save(title: String): Completable
-
-    fun delete(todo: Todo): Completable
-}
-
-class TodoModelImpl @Inject constructor(
+@Reusable
+class TodoDataModel @Inject constructor(
     private val todoRepository: TodoRepository
-) : TodoModel {
+) {
 
-    override fun observe(): Flowable<List<Todo>> {
+    fun observe(): Flow<List<Todo>> {
         return todoRepository.observe()
     }
 
-    override fun save(title: String): Completable {
-        return Completable.fromAction {
+    suspend fun save(title: String) {
+        withContext(Dispatchers.IO) {
             todoRepository.save(
                 Todo(
                     id = UUID.randomUUID().toString(),
@@ -37,12 +30,12 @@ class TodoModelImpl @Inject constructor(
                     updatedAt = System.currentTimeMillis()
                 )
             )
-        }.subscribeOn(Schedulers.io())
+        }
     }
 
-    override fun delete(todo: Todo): Completable {
-        return Completable.fromAction {
+    suspend fun delete(todo: Todo) {
+        withContext(Dispatchers.IO) {
             todoRepository.delete(todo)
-        }.subscribeOn(Schedulers.io())
+        }
     }
 }

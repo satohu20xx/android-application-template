@@ -10,9 +10,9 @@ import com.choilabo.todo.data.todo.entity.Todo
  */
 @Database(
     version = 1,
-    entities = arrayOf(
+    entities = [
         Todo::class
-    )
+    ]
 )
 abstract class TodoRoomDatabase : RoomDatabase() {
 
